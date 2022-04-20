@@ -4,7 +4,7 @@ import { IconWarning } from "../components/icons";
 import useAuth from "../data/hook/useAuth";
 
 export default function Autentication() {
-  const { usuario, loginGoogle } = useAuth();
+  const { cadastrar, login, loginGoogle } = useAuth();
 
   const [modo, setModo] = useState<"login" | "cadastro">("login");
   const [erro, setErro] = useState("");
@@ -17,9 +17,15 @@ export default function Autentication() {
     setTimeout(() => setErro(null), tempo * 1000);
   }
 
-  function submit() {
-    if (modo === "login") {
-    } else {
+  async function submit() {
+    try {
+      if (modo === "login") {
+        await login(email, senha);
+      } else {
+        await cadastrar(email, senha);
+      }
+    } catch (error) {
+      exibeErro(error?.message ?? "Ocorreu um erro inesperado", 10);
     }
   }
 
@@ -28,6 +34,7 @@ export default function Autentication() {
       <div className={`hidden md:block md:w-1/2 lg:w-2/3`}>
         <img
           src="https://source.unsplash.com/random"
+          // src="https://source.unsplash.com/search/photos?query=minimal"
           alt="Imagem Tela Autentication"
           className={`h-screen w-full object-cover`}
         />
